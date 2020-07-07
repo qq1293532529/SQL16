@@ -1,0 +1,133 @@
+﻿信息系统与数据库技术练习16答题卡
+
+班级：信管①班     
+姓名： 陈志豪
+学号：  20190307106
+
+注：请将答案放置在序号下方。*/
+
+（一）
+1.
+CREATE DATABASE Storage
+
+
+2.
+USE Storage
+
+
+3.
+CREATE TABLE Product
+(
+Pid CHAR(4) CONSTRAINT pk_Pid PRIMARY KEY,
+Pname VARCHAR(40) NOT NULL,
+Code CHAR(15),
+Weight Decimal,
+Price MONEY CONSTRA INT ck_Pay CHECK(Price>=0 AND <99999),
+Price MONEY,
+Pid CHAR(3)
+)
+
+
+
+4.
+INSERT Product(Pid,Pname,Specs,Price,Code,Cid)
+VALUES('PD03','商品',EQ2080,10000,202006011234567,'CT01')
+
+
+5.
+INSERT Product(Pid,Pname,Specs,Price,Code,Cid)
+VALUES('PD03','商品',EQ2081,123456,202006011234568,'CT02')
+
+
+6.
+ALTER TABLE Product
+ADD CONSTRAINT ck_Weight CHECK(Weight>=0 AND Weight<10000)
+
+7.
+UPDATE Product
+SET Pid='PD02'
+WHERE Weight='123456'
+
+8.
+UPDATE Product
+SET Pid='PD02'
+WHERE Weight='-100'
+
+9.
+CREATE TABLE WP
+(
+Cid CHAR(4) CONSTRAINT ck_Hazard FOREIGN KEY REFERENCES Product,
+Pid CHAR(4),
+PRIMARY KEY(Cid,Pid),
+Note Text,
+Hazard VARCHAR(16) CONSTRAINT pk_WP CHECK(Hazard IN ('爆炸品','液化气体','易燃液体','易燃固体','一般物品'))
+)
+
+10.
+INSERT WP
+VALUES('WD04','PD02','NULL','易燃液体')
+
+
+11.
+INSERT WP
+VALUES('WD05','PD02','NULL','压缩气体')
+
+12.
+INSERT WP
+VALUES('WD06','PD12','NULL','液化气体')
+
+13.
+CREATE TABLE Warehouse
+(
+Wid CHAR(4) PRIMARY KEY,
+Wname VARCHAR(40) NOT NULL,
+ParentWid CHAR(4) CONSTRAINT Fk_wh_wh FOREIGN KEY REFERENCES Warehouse
+)
+14.
+INSERT Warehouse
+VALUES('WD','云海仓库','10000','10000',NULL),
+('WD04','云1#仓库 ','3000','3000','WD'),
+('WD05','云2#仓库 ','3200','3200','WD')
+
+
+15.
+INSERT Warehouse
+VALUES('WD06','云3#仓库','2700','2700','WD0'),
+
+16.
+ALTER TABLE WP
+ADD CONSTRAINT FK_WP_WH KEY(Wid) REFERENCES WP
+
+
+17.
+DROP INDEX Warehouse
+SET Wid='WD04'
+
+18.
+ALTER TABLE WP
+DROP CONSTRAINT FK_WP_WH
+
+19.
+ALTER TABLE WP
+ADD CONSTRAINT FK_WP_WH FOREIGN KEY(Wid) REFERENCES Warehouse
+ON UPDATE CASCADE
+ON DELETE CASCADE
+
+20.
+SELECT * FROM WP
+SELECT * FROM Warehouse
+EXEC sp_helpindex WP
+EXEC sp_helpindex Warehouse
+
+21.
+ALTER TABLE Warehouse
+WHERE Wid='WD01'
+
+
+22.
+INSERT Warehouse
+WHERE Wid='WD01'
+SELECT * FROM WP
+SELECT * FROM Warehouse
+EXEC sp_helpindex WP
+EXEC sp_helpindex Warehouse
